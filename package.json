@@ -1,5 +1,5 @@
 {
-  "name": "scientist",
+  "name": "node-scientist",
   "version": "0.0.0",
   "description": "Helper to do Science!",
   "main": "index.js",
