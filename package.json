@@ -1,0 +1,46 @@
+{
+  "name": "scientist",
+  "version": "0.0.0",
+  "description": "Helper to do Science!",
+  "main": "index.js",
+  "scripts": {
+    "coverage-check": "istanbul check-coverage && echo 'Coverage check successful!'",
+    "coverage": "NODE_PATH=./lib istanbul cover ./node_modules/.bin/_mocha -- $npm_package_options_mocha test/unit && npm run coverage-check",
+    "coveralls": "cat ./coverage/lcov.info | coveralls",
+    "format": "standard --format",
+    "integration": "NODE_ENV=test NODE_PATH=./lib mocha $npm_package_options_mocha test/integration",
+    "lint": "standard",
+    "test": "npm run lint && npm run unit && npm run functional",
+    "unit": "NODE_ENV=test NODE_PATH=./lib mocha $npm_package_options_mocha test/unit"
+  },
+  "options": {
+    "mocha": "--recursive --reporter spec --bail"
+  },
+  "author": "Bryan Kendall <bryan@runnable.com>",
+  "license": "MIT",
+  "standard": {
+    "globals": [
+      "describe",
+      "before",
+      "beforeEach",
+      "after",
+      "afterEach",
+      "it"
+    ]
+  },
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "chai-as-promised": "^5.1.0",
+    "istanbul": "^0.4.1",
+    "mocha": "^2.3.4",
+    "sinon": "^1.17.2",
+    "standard": "^5.4.1"
+  },
+  "dependencies": {
+    "101": "^1.2.0",
+    "bluebird": "^3.1.1",
+    "debug": "^2.2.0",
+    "immutable": "^3.7.6",
+    "knuth-shuffle": "^1.0.1"
+  }
+}
