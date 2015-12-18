@@ -9,7 +9,7 @@ Scientist is built with and accepts Promises (or Functions that return Promises)
 Here's a quick and dirty example of how to Science!
 
 ```javascript
-var Experiment = require('scientist').Experiment
+var Experiment = require('node-scientist').Experiment
 
 var experiment = new Experiment('getData')
 // use: the control. value will be returned by `.run`.
@@ -26,7 +26,7 @@ experiment.run()
 ## Science within Models
 
 ```javascript
-var Scientist = require('scientist')
+var Scientist = require('node-scientist')
 
 function MyModel () {}
 util.inherits(MyModel, Scientist)
@@ -54,7 +54,7 @@ m.myMethod(function (err, value) {
 A very simple publisher that will print results to the screen.
 
 ```javascript
-var Experiment = require('scientist').Experiment
+var Experiment = require('node-scientist').Experiment
 var find = require('101/find')
 
 function MyExperiment (name) {
