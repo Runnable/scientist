@@ -17,6 +17,10 @@
     "mocha": "--recursive --reporter spec --bail"
   },
   "author": "Bryan Kendall <bryan@runnable.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Runnable/scientist"
+  },
   "license": "MIT",
   "standard": {
     "globals": [
