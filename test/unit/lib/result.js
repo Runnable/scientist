@@ -10,9 +10,10 @@ var Result = require('result')
 
 describe('Result', function () {
   var result
+  var mockContext = { zip: 'zap' }
   var mockExperiment = {
     name: 'foobar',
-    context: { zip: 'zap' }
+    context: sinon.stub().returns(mockContext)
   }
   var mockObservations = [{ name: 'control' }, { name: 'candidate' }]
   var mockControl = { name: 'control' }
@@ -33,7 +34,8 @@ describe('Result', function () {
   describe('context', function () {
     it('should return the experiment context', function () {
       result = Result.create(mockExperiment, mockObservations, mockControl)
-      assert.deepEqual(result.context(), mockExperiment.context)
+      assert.deepEqual(result.context(), mockExperiment.context())
+      assert.deepEqual(result.context(), mockContext)
     })
   })
 
