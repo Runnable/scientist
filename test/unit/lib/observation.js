@@ -3,7 +3,6 @@
 var chai = require('chai')
 chai.use(require('chai-as-promised'))
 var assert = chai.assert
-var Promise = require('bluebird')
 var sinon = require('sinon')
 
 var Observation = require('observation')
@@ -42,7 +41,7 @@ describe('Observation', function () {
     })
 
     it('should record a duration', function () {
-      function runThis () { return Promise.resolve().delay(5).then(testFn) }
+      function runThis () { return new Promise(function (resolve) { setTimeout(resolve, 5) }) }
       return assert.isFulfilled(Observation.create('foo', mockExperiment, runThis))
         .then(function (observation) {
           assert.isAbove(observation.duration, 5)
@@ -51,7 +50,7 @@ describe('Observation', function () {
 
     it('should record an exception, if thrown', function () {
       var error = new Error('foobar')
-      function runThis () { return Promise.resolve().throw(error) }
+      function runThis () { return Promise.reject(error) }
       return assert.isFulfilled(Observation.create('foo', mockExperiment, runThis))
         .then(function (observation) {
           assert.equal(observation.exception, error)
@@ -94,7 +93,7 @@ describe('Observation', function () {
     })
 
     it('should return false if there was no exception', function () {
-      function runThis () { return Promise.resolve().return(5) }
+      function runThis () { return Promise.resolve(5) }
       return assert.isFulfilled(Observation.create('foo', mockExperiment, runThis))
         .then(function (observation) {
           assert.equal(observation.raised(), false)
@@ -114,32 +113,32 @@ describe('Observation', function () {
     beforeEach(function () {
       return Promise.resolve()
         .then(function () {
-          function runThis () { return Promise.resolve().return(5) }
+          function runThis () { return Promise.resolve(5) }
           return Observation.create('foo', mockExperiment, runThis)
             .then(function (o) { observation = o })
         })
         .then(function () {
-          function runThis () { return Promise.resolve().return(5) }
+          function runThis () { return Promise.resolve(5) }
           return Observation.create('bar', mockExperiment, runThis)
             .then(function (o) { equalObservation = o })
         })
         .then(function () {
-          function runThis () { return Promise.resolve().return(6) }
+          function runThis () { return Promise.resolve(6) }
           return Observation.create('baz', mockExperiment, runThis)
             .then(function (o) { notEqualObservation = o })
         })
         .then(function () {
-          function runThis () { return Promise.resolve().throw(error) }
+          function runThis () { return Promise.reject(error) }
           return Observation.create('nope', mockExperiment, runThis)
             .then(function (o) { throwsObservation = o })
         })
         .then(function () {
-          function runThis () { return Promise.resolve().throw(error) }
+          function runThis () { return Promise.reject(error) }
           return Observation.create('alsono', mockExperiment, runThis)
             .then(function (o) { equalThrowsObservation = o })
         })
         .then(function () {
-          function runThis () { return Promise.resolve().throw(otherError) }
+          function runThis () { return Promise.reject(otherError) }
           return Observation.create('nonono', mockExperiment, runThis)
             .then(function (o) { notEqualThrowsObservation = o })
         })

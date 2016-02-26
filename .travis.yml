@@ -1,16 +1,7 @@
 language: node_js
-node_js:
-- "0.10"
-- "0.12"
-- "4.2"
-- "5"
+node_js: '4'
 sudo: false
-matrix:
-  allow_failures:
-    - node_js: "5"
 script:
 - npm run lint
-- npm run coverage
+- npm run unit
 - npm run integration
-after_script:
-- npm run coveralls

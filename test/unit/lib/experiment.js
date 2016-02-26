@@ -6,7 +6,6 @@ var assert = chai.assert
 
 var find = require('101/find')
 var hasProperties = require('101/has-properties')
-var Promise = require('bluebird')
 var sinon = require('sinon')
 var knuth_shuffle = require('knuth-shuffle')
 
@@ -197,8 +196,8 @@ describe('Experiment', function () {
   describe('should_experiment_run', function () {
     describe('with multiple behaviors', function () {
       beforeEach(function () {
-        experiment.use(Promise.resolve().return(1))
-        experiment.try(Promise.resolve().return(2))
+        experiment.use(Promise.resolve(1))
+        experiment.try(Promise.resolve(2))
       })
 
       describe('with no fn', function () {
@@ -307,7 +306,7 @@ describe('Experiment', function () {
         sinon.stub(Observation, 'create', function (key, experiment, fn) {
           var e
           return Promise.resolve()
-            .return(fn())
+            .then(function () { return fn() })
             .catch(function (err) { e = err })
             .then(function (value) {
               var o = {
