@@ -1,4 +1,5 @@
 import Debug from 'debug'
+import Promise from 'bluebird'
 import assign from '101/assign'
 import find from '101/find'
 import hasProperties from '101/has-properties'

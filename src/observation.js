@@ -1,3 +1,4 @@
+import Promise from 'bluebird'
 import isFunction from '101/is-function'
 
 class Observation {

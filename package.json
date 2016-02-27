@@ -9,7 +9,7 @@
     "integration": "NODE_ENV=test NODE_PATH=./src mocha $npm_package_options_mocha test/integration",
     "lint": "standard",
     "prepublish": "npm run build",
-    "test": "npm run lint && npm run unit && npm run functional",
+    "test": "npm run lint && npm run unit && npm run integration",
     "unit": "NODE_ENV=test NODE_PATH=./src mocha $npm_package_options_mocha test/unit"
   },
   "options": {
@@ -46,6 +46,7 @@
   },
   "dependencies": {
     "101": "^1.2.0",
+    "bluebird": "^3.3.3",
     "debug": "^2.2.0",
     "es6-error": "^2.0.2",
     "immutable": "^3.7.6",

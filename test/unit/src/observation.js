@@ -5,6 +5,8 @@ chai.use(require('chai-as-promised'))
 var assert = chai.assert
 var sinon = require('sinon')
 
+var Promise = require('bluebird')
+
 var Observation = require('observation')
 
 describe('Observation', function () {

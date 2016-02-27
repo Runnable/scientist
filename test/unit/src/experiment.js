@@ -4,6 +4,7 @@ var chai = require('chai')
 chai.use(require('chai-as-promised'))
 var assert = chai.assert
 
+var Promise = require('bluebird')
 var find = require('101/find')
 var hasProperties = require('101/has-properties')
 var sinon = require('sinon')
