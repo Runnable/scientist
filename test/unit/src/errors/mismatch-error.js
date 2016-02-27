@@ -9,7 +9,6 @@ var MismatchError = require('errors/mismatch-error')
 describe('MismatchError', function () {
   it('should set the message as passed to it', function () {
     var e = new MismatchError('foobar')
-    console.log(e)
     assert.equal(e.message, 'foobar')
   })
 
