@@ -8,7 +8,7 @@
     "format": "standard --format",
     "integration": "NODE_ENV=test NODE_PATH=./src mocha $npm_package_options_mocha test/integration",
     "lint": "standard",
-    "prepublish": "npm run build",
+    "prepublish": "not-in-install && npm run build || in-install",
     "test": "npm run lint && npm run unit && npm run integration",
     "unit": "NODE_ENV=test NODE_PATH=./src mocha $npm_package_options_mocha test/unit"
   },
@@ -50,6 +50,7 @@
     "debug": "^2.2.0",
     "es6-error": "^2.0.2",
     "immutable": "^3.7.6",
+    "in-publish": "^2.0.0",
     "knuth-shuffle": "^1.0.1"
   }
 }
