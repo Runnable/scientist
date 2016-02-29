@@ -7,3 +7,5 @@ script:
 - npm run lint
 - npm run unit
 - npm run integration
+notifications:
+  email: false
