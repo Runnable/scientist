@@ -5,7 +5,7 @@
   "main": "dist/scientist.js",
   "scripts": {
     "build": "babel --out-dir dist src",
-    "coverage": "nyc $npm_package_options_nyc_coverage npm run unit",
+    "coverage": "nyc --reporter=text --reporter=html $npm_package_options_nyc_coverage npm run unit",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "format": "standard --format",
     "integration": "NODE_ENV=test mocha $npm_package_options_mocha test/integration",
