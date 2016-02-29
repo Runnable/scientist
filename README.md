@@ -1,6 +1,7 @@
 # Scientist
 
 [![Build Status](https://img.shields.io/travis/Runnable/scientist/master.svg?style=flat-square)](https://travis-ci.org/Runnable/scientist)
+[![Coverage Status](https://img.shields.io/coveralls/Runnable/scientist/master.svg?style=flat-square)](https://coveralls.io/github/Runnable/scientist?branch=master)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](http://standardjs.com/)
 [![NPM Version](https://img.shields.io/npm/v/node-scientist.svg?style=flat-square)](https://www.npmjs.com/package/node-scientist)
 
