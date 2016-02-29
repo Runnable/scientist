@@ -6,11 +6,11 @@
   "scripts": {
     "build": "babel --out-dir dist src",
     "format": "standard --format",
-    "integration": "NODE_ENV=test NODE_PATH=./src mocha $npm_package_options_mocha test/integration",
+    "integration": "NODE_ENV=test mocha $npm_package_options_mocha test/integration",
     "lint": "standard",
     "prepublish": "not-in-install && npm run build || in-install",
     "test": "npm run lint && npm run unit && npm run integration",
-    "unit": "NODE_ENV=test NODE_PATH=./src mocha $npm_package_options_mocha test/unit"
+    "unit": "NODE_ENV=test mocha $npm_package_options_mocha test/unit"
   },
   "options": {
     "mocha": "--recursive --reporter spec --bail --compilers js:babel-register"

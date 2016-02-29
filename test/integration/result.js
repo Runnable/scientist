@@ -7,7 +7,7 @@ var assert = chai.assert
 var clone = require('101/clone')
 var sinon = require('sinon')
 
-var Result = require('result')
+var Result = require('../../src/result')
 
 var mockExperiment = {
   observations_are_equivalent: sinon.stub().returns(false),

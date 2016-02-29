@@ -10,11 +10,11 @@ var hasProperties = require('101/has-properties')
 var sinon = require('sinon')
 var knuth_shuffle = require('knuth-shuffle')
 
-var MismatchError = require('errors/mismatch-error')
-var Observation = require('observation')
-var Result = require('result')
+var MismatchError = require('../../../src/errors/mismatch-error')
+var Observation = require('../../../src/observation')
+var Result = require('../../../src/result')
 
-var Experiment = require('experiment')
+var Experiment = require('../../../src/experiment')
 
 describe('Experiment', function () {
   var experiment

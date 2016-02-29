@@ -7,7 +7,7 @@ var sinon = require('sinon')
 
 var Promise = require('bluebird')
 
-var Observation = require('observation')
+var Observation = require('../../../src/observation')
 
 describe('Observation', function () {
   var mockExperiment = {}
