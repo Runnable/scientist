@@ -84,11 +84,11 @@ class Result {
    * @private
    */
   evaluate_candidates () {
-    let mismatched = this.candidates.filter(candidate => {
+    let mismatched = this.candidates.filter((candidate) => {
       return !this.experiment.observations_are_equivalent(this.control, candidate)
     })
 
-    mismatched.forEach(candidate => {
+    mismatched.forEach((candidate) => {
       if (this.experiment.ignore_mismatched_observation(this.control, candidate)) {
         this._ignored = this._ignored.push(candidate)
       } else {

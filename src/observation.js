@@ -12,10 +12,10 @@ class Observation {
   static create (name, experiment, fn) {
     const observation = new Observation(name, experiment, fn)
     return Promise.resolve()
-      .then(_ => (observation.fn()))
-      .then(value => { observation.value = value })
-      .catch(err => { observation.exception = err })
-      .then(_ => {
+      .then((_) => (observation.fn()))
+      .then((value) => { observation.value = value })
+      .catch((err) => { observation.exception = err })
+      .then((_) => {
         observation.duration = Date.now() - observation.now
         return observation
       })

@@ -113,7 +113,7 @@ class Experiment {
     if (this._ignores.size === 0) {
       return false
     }
-    return this._ignores.some(fn => (fn(control.value, candidate.value)))
+    return this._ignores.some((fn) => (fn(control.value, candidate.value)))
   }
 
   /**
@@ -143,7 +143,7 @@ class Experiment {
    */
   run (name = 'control') {
     debug('run')
-    return Promise.resolve().then(_ => {
+    return Promise.resolve().then((_) => {
       const control_fn = this._behaviors.get(name)
       if (!isFunction(control_fn)) {
         throw new Error(`${name} behavior is missing.`)
@@ -153,28 +153,28 @@ class Experiment {
         return control_fn()
       }
 
-      return Promise.resolve().then(_ => {
+      return Promise.resolve().then((_) => {
         if (isFunction(this._before_run_fn)) {
           return this._before_run_fn()
         }
       })
-        .then(_ => {
+        .then((_) => {
           let promises = []
 
           const shuffle = knuth_shuffle.knuthShuffle
-          shuffle(this._behaviors.keySeq().toArray()).forEach(key => {
+          shuffle(this._behaviors.keySeq().toArray()).forEach((key) => {
             const fn = this._behaviors.get(key)
             promises.push(Observation.create(key, this, fn))
           })
 
           return Promise.all(promises)
         })
-        .then(observations => {
+        .then((observations) => {
           const control = find(observations, hasProperties({ name: name }))
           const result = Result.create(this, observations, control)
 
           return this.publish(result)
-            .then(_ => {
+            .then((_) => {
               if (this.raise_on_mismatches() && result.mismatched()) {
                 throw new MismatchError(name, result)
               }

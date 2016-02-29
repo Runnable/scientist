@@ -40,9 +40,10 @@
     "babel-register": "^6.5.2",
     "chai": "^3.4.1",
     "chai-as-promised": "^5.1.0",
+    "isparta": "^4.0.0",
     "mocha": "^2.3.4",
     "sinon": "^1.17.2",
-    "standard": "^5.4.1"
+    "standard": "^6.0.7"
   },
   "dependencies": {
     "101": "^1.2.0",
