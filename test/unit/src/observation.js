@@ -46,7 +46,7 @@ describe('Observation', function () {
       function runThis () { return new Promise(function (resolve) { setTimeout(resolve, 5) }) }
       return assert.isFulfilled(Observation.create('foo', mockExperiment, runThis))
         .then(function (observation) {
-          assert.isAbove(observation.duration, 5)
+          assert.isAbove(observation.duration, 4)
         })
     })
 
