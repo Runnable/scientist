@@ -4,12 +4,11 @@ var chai = require('chai')
 chai.use(require('chai-as-promised'))
 var assert = chai.assert
 
-var MismatchError = require('errors/mismatch-error')
+var MismatchError = require('../../../../src/errors/mismatch-error')
 
 describe('MismatchError', function () {
   it('should set the message as passed to it', function () {
     var e = new MismatchError('foobar')
-    console.log(e)
     assert.equal(e.message, 'foobar')
   })
 

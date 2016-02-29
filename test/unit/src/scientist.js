@@ -6,9 +6,9 @@ var assert = chai.assert
 
 var util = require('util')
 
-var Experiment = require('experiment')
+var Experiment = require('../../../src/experiment')
 
-var Scientist = require('scientist')
+var Scientist = require('../../../src/scientist')
 
 function MyExp (name) {
   Experiment.call(this, name)

@@ -90,7 +90,6 @@ This publisher is used like so:
 ```javascript
 // as the first case, with just an Experiment:
 var experiment = new MyExperiment('foobar')
-// and continue w
 
 // if you want to include the Scientist in the model:
 SomeModel.prototype.myMethod = function (cb) {

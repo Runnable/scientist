@@ -1,0 +1,6 @@
+.babelrc
+.nyc_output
+.travisrc
+coverage
+src
+test

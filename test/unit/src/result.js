@@ -6,7 +6,7 @@ var assert = chai.assert
 
 var sinon = require('sinon')
 
-var Result = require('result')
+var Result = require('../../../src/result')
 
 describe('Result', function () {
   var result
