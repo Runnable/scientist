@@ -5,6 +5,9 @@
   "main": "dist/scientist.js",
   "scripts": {
     "build": "babel --out-dir dist src",
+    "coverage": "babel-node node_modules/isparta/bin/isparta cover node_modules/mocha/bin/_mocha -- $npm_package_options_mocha test/unit && npm run coverage-check",
+    "coverage-check": "istanbul check-coverage && echo 'Success' || echo 'Fail'",
+    "coveralls": "cat coverage/lcov.info | coveralls",
     "format": "standard --format",
     "integration": "NODE_ENV=test mocha $npm_package_options_mocha test/integration",
     "lint": "standard",
@@ -40,7 +43,9 @@
     "babel-register": "^6.5.2",
     "chai": "^3.4.1",
     "chai-as-promised": "^5.1.0",
+    "coveralls": "^2.11.8",
     "isparta": "^4.0.0",
+    "istanbul": "^0.4.2",
     "mocha": "^2.3.4",
     "sinon": "^1.17.2",
     "standard": "^6.0.7"

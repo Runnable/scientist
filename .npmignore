@@ -1,4 +1,5 @@
 .babelrc
 .travisrc
+coverage
 src
 test
