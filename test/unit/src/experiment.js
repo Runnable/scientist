@@ -332,6 +332,14 @@ describe('Experiment', function () {
         knuth_shuffle.knuthShuffle.restore()
       })
 
+      it('should reject with an error if the specified control is missing', function () {
+        return assert.isRejected(
+          experiment.run('nope'),
+          Error,
+          /nope.+missing/i
+        )
+      })
+
       it('should check if the experiment can be run', function () {
         return assert.isFulfilled(experiment.run())
           .then(function () {
