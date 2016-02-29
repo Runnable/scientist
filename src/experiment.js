@@ -143,7 +143,7 @@ class Experiment {
    */
   run (name = 'control') {
     debug('run')
-    return Promise.resolve().then((_) => {
+    return Promise.resolve().then(() => {
       const control_fn = this._behaviors.get(name)
       if (!isFunction(control_fn)) {
         throw new Error(`${name} behavior is missing.`)
@@ -153,12 +153,12 @@ class Experiment {
         return control_fn()
       }
 
-      return Promise.resolve().then((_) => {
+      return Promise.resolve().then(() => {
         if (isFunction(this._before_run_fn)) {
           return this._before_run_fn()
         }
       })
-        .then((_) => {
+        .then(() => {
           let promises = []
 
           const shuffle = knuth_shuffle.knuthShuffle
@@ -174,7 +174,7 @@ class Experiment {
           const result = Result.create(this, observations, control)
 
           return this.publish(result)
-            .then((_) => {
+            .then(() => {
               if (this.raise_on_mismatches() && result.mismatched()) {
                 throw new MismatchError(name, result)
               }
