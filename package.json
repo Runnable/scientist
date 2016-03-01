@@ -9,7 +9,9 @@
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "format": "standard --format",
     "integration": "NODE_ENV=test mocha $npm_package_options_mocha test/integration",
-    "lint": "standard",
+    "lint": "npm run lint:format && npm run lint:type",
+    "lint:format": "standard",
+    "lint:type": "flow",
     "prepublish": "not-in-install && npm run build || in-install",
     "test": "npm run lint && npm run unit && npm run integration",
     "unit": "NODE_ENV=test mocha $npm_package_options_mocha test/unit"
