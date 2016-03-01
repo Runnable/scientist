@@ -14,24 +14,36 @@ declare module 'immutable' {
 
   declare class Iterable<K, V> {
     toArray(): Array<V>;
+    filter(
+      predicate: (value: V, key: K, iter: this) => any,
+      context?: any
+    ): this;
+    filterNot(
+      predicate: (value: V, key: K, iter: this) => any,
+      context?: any
+    ): this;
+    forEach(
+      sideEffect: (value: V, key: K, iter: this) => any,
+      context?: any
+    ): number;
   }
 
   declare class Collection<K, V> extends Iterable<K, V> {
     size: number;
     keySeq(): IndexedSeq<K>;
     some(
-      predicate: (value: V, key: K, iter: Iterable<K, V>) => boolean,
+      predicate: (value: V, key: K, iter: this) => boolean,
       context?: any
     ): boolean;
   }
+
+  declare class Seq<K, V> extends Iterable<K, V> {}
+
+  declare class IndexedSeq<T> extends Seq<number, T> {}
 
   declare class KeyedCollection<K, V> extends Collection<K, V> {}
 
   declare class IndexedCollection<T> extends Collection<number, T> {
     push(...values: T[]): List<T>;
   }
-
-  declare class Seq<K, V> extends Iterable<K, V> {}
-
-  declare class IndexedSeq<T> extends Seq<number, T> {}
 }
