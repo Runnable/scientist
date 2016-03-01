@@ -11,7 +11,8 @@
     "integration": "NODE_ENV=test mocha $npm_package_options_mocha test/integration",
     "lint": "npm run lint:format && npm run lint:type",
     "lint:format": "standard",
-    "lint:type": "flow",
+    "lint:type": "flow --timeout 5",
+    "lint:type:start-server": "flow start",
     "prepublish": "not-in-install && npm run build || in-install",
     "test": "npm run lint && npm run unit && npm run integration",
     "unit": "NODE_ENV=test mocha $npm_package_options_mocha test/unit"
