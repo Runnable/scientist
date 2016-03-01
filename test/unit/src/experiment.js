@@ -401,6 +401,16 @@ describe('Experiment', function () {
           })
       })
 
+      it('should reject if for some reason the control got lost', function () {
+        knuth_shuffle.knuthShuffle.restore()
+        sinon.stub(knuth_shuffle, 'knuthShuffle').returns([])
+        return assert.isRejected(
+          experiment.run(),
+          Error,
+          /could not find control observation/i
+        )
+      })
+
       it('should run each of the behaviors', function () {
         return assert.isFulfilled(experiment.run())
           .then(function () {

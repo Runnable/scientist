@@ -1,11 +1,27 @@
+/* @flow */
+
 import Debug from 'debug'
 import hasProperties from '101/has-properties'
 import { List } from 'immutable'
 
+import Experiment from './experiment'
+import Observation from './observation'
+
 const debug = Debug('scientist:result')
 
 class Result {
-  constructor (experiment, observations, control) {
+  _ignored: List<Observation>;
+  _mismatched: List<Observation>;
+  candidates: List<Observation>;
+  control: Observation;
+  experiment: Experiment;
+  observations: Array<Observation>;
+
+  constructor (
+    experiment: Experiment,
+    observations: Array<Observation>,
+    control: Observation
+  ) {
     debug('constructor')
     this.experiment = experiment
     this.observations = observations
@@ -28,7 +44,11 @@ class Result {
    * @param {Observation} control Observation of the control.
    * @return {Result} New Result.
    */
-  static create (experiment, observations, control) {
+  static create (
+    experiment: Experiment,
+    observations: Array<Observation>,
+    control: Observation
+  ) {
     debug('create')
     return new Result(experiment, observations, control)
   }
@@ -37,7 +57,7 @@ class Result {
    * Get the Experiment's context.
    * @return {Object} Experiment's context.
    */
-  context () {
+  context (): Object {
     debug('context')
     return this.experiment.context()
   }
@@ -46,7 +66,7 @@ class Result {
    * Get the Experiment's name.
    * @return {String} Experiment's name.
    */
-  experiment_name () {
+  experiment_name (): string {
     debug('experiment_name')
     return this.experiment.name
   }
@@ -55,7 +75,7 @@ class Result {
    * Was the result a match between all behaviors?
    * @return {Boolean} Returns true if all the results are equivalent.
    */
-  matched () {
+  matched (): boolean {
     debug('matched')
     return this._mismatched.size === 0 && !this.ignored()
   }
@@ -64,7 +84,7 @@ class Result {
    * Were there mismatches in the behaviors?
    * @return {Boolean} Returns true if there were mismatched behaviors.
    */
-  mismatched () {
+  mismatched (): boolean {
     debug('mismatched')
     return this._mismatched.size > 0
   }
@@ -73,7 +93,7 @@ class Result {
    * Were there any mismatches that were ignored?
    * @return {Boolean} Returns true if there were any ignored mismatches.
    */
-  ignored () {
+  ignored (): boolean {
     debug('ignored')
     return this._ignored.size > 0
   }

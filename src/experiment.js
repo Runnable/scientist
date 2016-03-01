@@ -1,3 +1,5 @@
+/* @flow */
+
 import Debug from 'debug'
 import Promise from 'bluebird'
 import assign from '101/assign'
@@ -15,8 +17,19 @@ import Result from './result'
 
 const debug = Debug('scientist:experiment')
 
-class Experiment {
-  constructor (name = 'experiment') {
+class Experiment<V> {
+  _before_run_fn: Function;
+  _behaviors: Map;
+  _cleaner_fn: Function;
+  _comparator: Function;
+  _context: Object;
+  _ignores: List;
+  _raise_on_mismatches: boolean;
+  _run_if_fn: Function;
+  enabled: boolean;
+  name: string;
+
+  constructor (name: string = 'experiment') {
     debug('constructor')
     this.name = name
     this.enabled = true
@@ -26,7 +39,7 @@ class Experiment {
     this._raise_on_mismatches = false
   }
 
-  publish (result) {
+  publish (result: Object): Promise<boolean> {
     debug('publish')
     return Promise.resolve(true)
   }
@@ -36,7 +49,7 @@ class Experiment {
    * enabled.
    * @param {Function} fn Function to run.
    */
-  before_run (fn) {
+  before_run (fn: () => boolean) {
     debug('before_run')
     this._before_run_fn = fn
   }
@@ -46,7 +59,7 @@ class Experiment {
    * @param {Function} fn Function to clean the value. Must take one argument,
    *   the value to be cleaned.
    */
-  clean (fn) {
+  clean (fn: (value: V) => V) {
     debug('clean')
     this._cleaner_fn = fn
   }
@@ -57,7 +70,7 @@ class Experiment {
    * @param {Object} value Value to be cleaned.
    * @return {Object} Cleaned (if applicable) value.
    */
-  clean_value (value) {
+  clean_value (value: V): V {
     debug('clean_value')
     if (isFunction(this._cleaner_fn)) {
       return this._cleaner_fn(value)
@@ -71,7 +84,7 @@ class Experiment {
    * @param {Function} fn Function to compare. Must accept two arguments, the
    *   control and candidate values, and return true or false.
    */
-  compare (fn) {
+  compare (fn: (a: V, b: V) => boolean) {
     debug('compare')
     this._comparator = fn
   }
@@ -81,9 +94,9 @@ class Experiment {
    * @param {[Object]} context Extra data to add.
    * @return {Object} Extra experiment data.
    */
-  context (context) {
+  context (context: ?Object): Object {
     debug('context')
-    if (isObject(context)) {
+    if (context && isObject(context)) {
       assign(this._context, context)
     }
     return this._context
@@ -95,7 +108,7 @@ class Experiment {
    * do not match. If the function returns true, the mismatch is discarded.
    * @param {Function} fn Function that returns a boolean about a match.
    */
-  ignore (fn) {
+  ignore (fn: (o: Observation) => boolean) {
     debug('ignore')
     this._ignores = this._ignores.push(fn)
   }
@@ -108,7 +121,10 @@ class Experiment {
    * @param {Object} candidate Candidate value that mismatches.
    * @return {boolean} Returns true if the pair should be ignored.
    */
-  ignore_mismatched_observation (control, candidate) {
+  ignore_mismatched_observation (
+    control: Observation,
+    candidate: Observation
+  ): boolean {
     debug('ignore_mismatched_observation')
     if (this._ignores.size === 0) {
       return false
@@ -123,7 +139,10 @@ class Experiment {
    * @param {Observation} candidate Candidate Observation.
    * @return {Boolean} True if the two observations are equivalent.
    */
-  observations_are_equivalent (control, candidate) {
+  observations_are_equivalent (
+    control: Observation,
+    candidate: Observation
+  ): boolean {
     debug('observations_are_equivalent')
     if (isFunction(this._comparator)) {
       return this._comparator(control, candidate)
@@ -141,7 +160,7 @@ class Experiment {
    * @param {String} name Name of the behavior to run. Default: "control"
    * @return {Object} Result of the control behavior.
    */
-  run (name = 'control') {
+  run (name: string = 'control'): Promise<V> {
     debug('run')
     return Promise.resolve().then(() => {
       const control_fn = this._behaviors.get(name)
@@ -171,6 +190,9 @@ class Experiment {
         })
         .then((observations) => {
           const control = find(observations, hasProperties({ name: name }))
+          if (!control) {
+            throw new Error(`Could not find control observation (${name})`)
+          }
           const result = Result.create(this, observations, control)
 
           return this.publish(result)
@@ -193,7 +215,7 @@ class Experiment {
    * @param {Function} fn Function determining fate of experiment. Returns true or
    *   false.
    */
-  run_if (fn) {
+  run_if (fn: () => boolean) {
     debug('run_if')
     this._run_if_fn = fn
   }
@@ -203,7 +225,7 @@ class Experiment {
    * @private
    * @return {Boolean} True if the _run_if_fn returns true.
    */
-  run_if_fn_allows () {
+  run_if_fn_allows (): boolean {
     debug('run_if_fn_allows')
     return isFunction(this._run_if_fn)
       ? this._run_if_fn()
@@ -214,7 +236,7 @@ class Experiment {
    * Determine if the experiment should be run.
    * @return {Boolean} True if the experiment is allowed to run.
    */
-  should_experiment_run () {
+  should_experiment_run (): boolean {
     debug('should_experiment_run')
     return this._behaviors.size > 1 &&
       this.enabled &&
@@ -225,12 +247,13 @@ class Experiment {
    * Determine if mismatch errors should be thrown.
    * @return {[type]} [description]
    */
-  raise_on_mismatches () {
+  raise_on_mismatches (): boolean {
     debug('raise_on_mismatches')
     return !!this._raise_on_mismatches
   }
 
-  try (name, fn) {
+  // FIXME(@bkendall): I dislike this...
+  try (name: string | Function, fn: ?string | Function) {
     debug('try')
     if (!isString(name)) {
       fn = name
@@ -242,7 +265,7 @@ class Experiment {
     this._behaviors = this._behaviors.set(name, fn)
   }
 
-  use (fn) {
+  use (fn: Function) {
     debug('use')
     this.try('control', fn)
   }
