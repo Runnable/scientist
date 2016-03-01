@@ -1,8 +1,20 @@
-import Promise from 'bluebird'
-import isFunction from '101/is-function'
+/* @flow */
 
-class Observation {
-  constructor (name, experiment, fn) {
+import isFunction from '101/is-function'
+import Promise from 'bluebird'
+
+import Experiment from './experiment'
+
+class Observation<V> {
+  duration: number;
+  exception: Error;
+  experiment: Experiment;
+  fn: Function;
+  name: string;
+  now: number;
+  value: V;
+
+  constructor (name: string, experiment: Experiment, fn: Function) {
     this.name = name
     this.experiment = experiment
     this.now = Date.now()
@@ -36,7 +48,7 @@ class Observation {
    * Check to see if this observation ever raised an exception.
    * @return {Boolean} True if an exception was recorded.
    */
-  raised () {
+  raised (): boolean {
     return !!this.exception
   }
 
@@ -50,7 +62,10 @@ class Observation {
    * @param {Function} comparator Comparator function that takes two values.
    * @return {Boolean} True if they are equivalent.
    */
-  equivalent_to (other, comparator) {
+  equivalent_to (
+    other: Observation,
+    comparator: (a: V, b: V) => boolean
+  ): boolean {
     if (!(other instanceof Observation)) {
       return false
     }
