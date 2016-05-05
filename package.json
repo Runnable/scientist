@@ -1,6 +1,6 @@
 {
   "name": "node-scientist",
-  "version": "2.0.1",
+  "version": "3.0.0",
   "description": "Helper to do Science!",
   "main": "dist/scientist.js",
   "scripts": {
