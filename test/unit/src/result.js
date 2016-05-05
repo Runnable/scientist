@@ -18,10 +18,10 @@ describe('Result', function () {
   var mockObservations = [{ name: 'control' }, { name: 'candidate' }]
   var mockControl = { name: 'control' }
   beforeEach(function () {
-    sinon.stub(Result.prototype, 'evaluate_candidates')
+    sinon.stub(Result.prototype, 'evaluateCandidates')
   })
   afterEach(function () {
-    Result.prototype.evaluate_candidates.restore()
+    Result.prototype.evaluateCandidates.restore()
   })
 
   describe('create', function () {
@@ -39,10 +39,10 @@ describe('Result', function () {
     })
   })
 
-  describe('experiment_name', function () {
+  describe('experimentName', function () {
     it('should return the experiment name', function () {
       result = Result.create(mockExperiment, mockObservations, mockControl)
-      assert.deepEqual(result.experiment_name(), 'foobar')
+      assert.deepEqual(result.experimentName(), 'foobar')
     })
   })
 
@@ -108,17 +108,17 @@ describe('Result', function () {
     })
   })
 
-  describe('evaluate_candidates', function () {
+  describe('evaluateCandidates', function () {
     beforeEach(function () {
-      Result.prototype.evaluate_candidates.restore()
+      Result.prototype.evaluateCandidates.restore()
     })
     afterEach(function () {
-      sinon.stub(Result.prototype, 'evaluate_candidates')
+      sinon.stub(Result.prototype, 'evaluateCandidates')
     })
 
     describe('should collect all equivalent observations', function () {
       beforeEach(function () {
-        mockExperiment.observations_are_equivalent = sinon.stub().returns(true)
+        mockExperiment.observationsAreEquivalent = sinon.stub().returns(true)
         result = Result.create(mockExperiment, mockObservations, mockControl)
       })
 
@@ -133,8 +133,8 @@ describe('Result', function () {
 
     describe('should collect all mismatched observations', function () {
       beforeEach(function () {
-        mockExperiment.observations_are_equivalent = sinon.stub().returns(false)
-        mockExperiment.ignore_mismatched_observation = sinon.stub().returns(false)
+        mockExperiment.observationsAreEquivalent = sinon.stub().returns(false)
+        mockExperiment.ignoreMismatchedObservation = sinon.stub().returns(false)
         result = Result.create(mockExperiment, mockObservations, mockControl)
       })
 
@@ -150,8 +150,8 @@ describe('Result', function () {
 
     describe('should collect all mismatched and ignored observations', function () {
       beforeEach(function () {
-        mockExperiment.observations_are_equivalent = sinon.stub().returns(false)
-        mockExperiment.ignore_mismatched_observation = sinon.stub().returns(true)
+        mockExperiment.observationsAreEquivalent = sinon.stub().returns(false)
+        mockExperiment.ignoreMismatchedObservation = sinon.stub().returns(true)
         result = Result.create(mockExperiment, mockObservations, mockControl)
       })
 

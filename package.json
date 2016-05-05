@@ -40,7 +40,7 @@
   },
   "devDependencies": {
     "babel-cli": "^6.5.1",
-    "babel-eslint": "^5.0.0",
+    "babel-eslint": "^6.0.4",
     "babel-plugin-add-module-exports": "^0.1.2",
     "babel-plugin-transform-class-properties": "^6.6.0",
     "babel-plugin-transform-flow-strip-types": "^6.5.0",
@@ -49,11 +49,11 @@
     "chai": "^3.4.1",
     "chai-as-promised": "^5.1.0",
     "coveralls": "^2.11.8",
-    "flow-bin": "^0.22.0",
+    "flow-bin": "^0.24.1",
     "mocha": "^2.3.4",
-    "nyc": "^5.6.0",
+    "nyc": "^6.4.2",
     "sinon": "^1.17.2",
-    "standard": "^6.0.7"
+    "standard": "^7.0.1"
   },
   "dependencies": {
     "101": "^1.2.0",

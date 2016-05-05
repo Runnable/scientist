@@ -1,8 +1,8 @@
 /* @flow */
 
+import { List } from 'immutable'
 import Debug from 'debug'
 import hasProperties from '101/has-properties'
-import { List } from 'immutable'
 
 import Experiment from './experiment'
 import Observation from './observation'
@@ -33,7 +33,7 @@ class Result {
     this._mismatched = List()
     this._ignored = List()
 
-    this.evaluate_candidates()
+    this.evaluateCandidates()
   }
 
   /**
@@ -66,8 +66,8 @@ class Result {
    * Get the Experiment's name.
    * @return {String} Experiment's name.
    */
-  experiment_name (): string {
-    debug('experiment_name')
+  experimentName (): string {
+    debug('experimentName')
     return this.experiment.name
   }
 
@@ -103,13 +103,13 @@ class Result {
    * ._mismatched and ._ignored with appropriate candidates.
    * @private
    */
-  evaluate_candidates () {
+  evaluateCandidates () {
     let mismatched = this.candidates.filter((candidate) => {
-      return !this.experiment.observations_are_equivalent(this.control, candidate)
+      return !this.experiment.observationsAreEquivalent(this.control, candidate)
     })
 
     mismatched.forEach((candidate) => {
-      if (this.experiment.ignore_mismatched_observation(this.control, candidate)) {
+      if (this.experiment.ignoreMismatchedObservation(this.control, candidate)) {
         this._ignored = this._ignored.push(candidate)
       } else {
         this._mismatched = this._mismatched.push(candidate)

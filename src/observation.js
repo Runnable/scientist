@@ -38,9 +38,9 @@ class Observation<V> {
    * block to clean the observed value.
    * @return {Object} Cleaned value.
    */
-  cleaned_value () {
+  cleanedValue () {
     if (this.value) {
-      return this.experiment.clean_value(this.value)
+      return this.experiment.cleanValue(this.value)
     }
   }
 
@@ -62,7 +62,7 @@ class Observation<V> {
    * @param {Function} comparator Comparator function that takes two values.
    * @return {Boolean} True if they are equivalent.
    */
-  equivalent_to (
+  equivalentTo (
     other: Observation,
     comparator: (a: V, b: V) => boolean
   ): boolean {
@@ -70,23 +70,23 @@ class Observation<V> {
       return false
     }
 
-    let values_are_equal = false
-    const both_raised = other.raised() && this.raised()
-    const neither_raised = !other.raised() && !this.raised()
+    let valuesAreEqual = false
+    const bothRaised = other.raised() && this.raised()
+    const neitherRaised = !other.raised() && !this.raised()
 
-    if (neither_raised) {
+    if (neitherRaised) {
       if (isFunction(comparator)) {
-        values_are_equal = comparator(this.value, other.value)
+        valuesAreEqual = comparator(this.value, other.value)
       } else {
-        values_are_equal = this.value === other.value
+        valuesAreEqual = this.value === other.value
       }
     }
 
-    const exceptions_are_equivalent = both_raised &&
+    const exceptionsAreEquivalent = bothRaised &&
       other.exception.message === this.exception.message
 
-    return (neither_raised && values_are_equal) ||
-      (both_raised && exceptions_are_equivalent)
+    return (neitherRaised && valuesAreEqual) ||
+      (bothRaised && exceptionsAreEquivalent)
   }
 }
 
