@@ -14,7 +14,7 @@ describe('Observation', function () {
   var testFn
   beforeEach(function () {
     testFn = sinon.stub().returns(5)
-    mockExperiment.clean_value = sinon.stub().returnsArg(0)
+    mockExperiment.cleanValue = sinon.stub().returnsArg(0)
   })
 
   describe('create', function () {
@@ -60,15 +60,15 @@ describe('Observation', function () {
     })
   })
 
-  describe('cleaned_value', function () {
+  describe('cleanedValue', function () {
     it('should clean the stored value', function () {
       function runThis () { return Promise.resolve().then(testFn) }
       return assert.isFulfilled(Observation.create('foo', mockExperiment, runThis))
         .then(function (observation) {
-          var value = observation.cleaned_value()
+          var value = observation.cleanedValue()
           assert.equal(value, 5)
-          sinon.assert.calledOnce(mockExperiment.clean_value)
-          sinon.assert.calledWith(mockExperiment.clean_value, 5)
+          sinon.assert.calledOnce(mockExperiment.cleanValue)
+          sinon.assert.calledWith(mockExperiment.cleanValue, 5)
         })
     })
 
@@ -77,9 +77,9 @@ describe('Observation', function () {
       return assert.isFulfilled(Observation.create('foo', mockExperiment, runThis))
         .then(function (observation) {
           delete observation.value
-          var value = observation.cleaned_value()
+          var value = observation.cleanedValue()
           assert.equal(value, undefined)
-          sinon.assert.notCalled(mockExperiment.clean_value)
+          sinon.assert.notCalled(mockExperiment.cleanValue)
         })
     })
   })
@@ -147,42 +147,42 @@ describe('Observation', function () {
     })
 
     it('should return false if passed not an Observation', function () {
-      assert.notOk(observation.equivalent_to({}), 'object is invalid')
-      assert.notOk(observation.equivalent_to('foo'), 'string is invalid')
-      assert.notOk(observation.equivalent_to(4), 'number is invalid')
+      assert.notOk(observation.equivalentTo({}), 'object is invalid')
+      assert.notOk(observation.equivalentTo('foo'), 'string is invalid')
+      assert.notOk(observation.equivalentTo(4), 'number is invalid')
     })
 
     describe('with no exceptions', function () {
       it('should return true if compared with equivalent Observation value', function () {
-        assert.ok(observation.equivalent_to(observation), 'equal to self')
-        assert.ok(observation.equivalent_to(equalObservation), 'equal to equivalent')
+        assert.ok(observation.equivalentTo(observation), 'equal to self')
+        assert.ok(observation.equivalentTo(equalObservation), 'equal to equivalent')
       })
 
       it('should return false if compared with non equivalent Observation value', function () {
-        assert.notOk(observation.equivalent_to(notEqualObservation), 'not equal to other')
+        assert.notOk(observation.equivalentTo(notEqualObservation), 'not equal to other')
       })
     })
 
     describe('when exceptions are thrown', function () {
       it('should return true if compared with equivalent Observation error', function () {
-        assert.ok(throwsObservation.equivalent_to(throwsObservation), 'equal to self')
-        assert.ok(throwsObservation.equivalent_to(equalThrowsObservation), 'equal to equivalent')
+        assert.ok(throwsObservation.equivalentTo(throwsObservation), 'equal to self')
+        assert.ok(throwsObservation.equivalentTo(equalThrowsObservation), 'equal to equivalent')
       })
 
       it('should return false if compared with non equivalent Observation error', function () {
-        assert.notOk(throwsObservation.equivalent_to(notEqualThrowsObservation), 'not equal to other')
+        assert.notOk(throwsObservation.equivalentTo(notEqualThrowsObservation), 'not equal to other')
       })
 
       it('should return false if compared with Observation with no error', function () {
-        assert.notOk(observation.equivalent_to(throwsObservation), 'not equal to error')
-        assert.notOk(throwsObservation.equivalent_to(observation), 'not equal to valid')
+        assert.notOk(observation.equivalentTo(throwsObservation), 'not equal to error')
+        assert.notOk(throwsObservation.equivalentTo(observation), 'not equal to valid')
       })
     })
 
     describe('when a comparator function is passed', function () {
       it('should use the comparator to compare the values', function () {
         var compare = sinon.stub().returns(true)
-        assert.ok(observation.equivalent_to(notEqualObservation, compare), 'equal when forced')
+        assert.ok(observation.equivalentTo(notEqualObservation, compare), 'equal when forced')
       })
     })
   })

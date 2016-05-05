@@ -8,7 +8,7 @@ var Promise = require('bluebird')
 var find = require('101/find')
 var hasProperties = require('101/has-properties')
 var sinon = require('sinon')
-var knuth_shuffle = require('knuth-shuffle')
+var KnuthShuffle = require('knuth-shuffle')
 
 var MismatchError = require('../../../src/errors/mismatch-error')
 var Observation = require('../../../src/observation')
@@ -39,10 +39,10 @@ describe('Experiment', function () {
     })
   })
 
-  describe('before_run', function () {
-    it('should set the internal before_run function', function () {
+  describe('beforeRun', function () {
+    it('should set the internal beforeRun function', function () {
       var fn = sinon.stub().returns(Promise.resolve(true))
-      experiment.before_run(fn)
+      experiment.beforeRun(fn)
       assert.deepEqual(experiment._before_run_fn, fn)
     })
   })
@@ -55,17 +55,17 @@ describe('Experiment', function () {
     })
   })
 
-  describe('clean_value', function () {
+  describe('cleanValue', function () {
     it('should return the value if no clean function', function () {
       assert.isUndefined(experiment._cleaner_fn)
       var value = 'foo'
-      assert.deepEqual(experiment.clean_value(value), value)
+      assert.deepEqual(experiment.cleanValue(value), value)
     })
     it('should clean the value if cleaner is defined', function () {
       function fn (value) { return value + ' bar' }
       experiment.clean(fn)
       var value = 'foo'
-      assert.deepEqual(experiment.clean_value(value), value + ' bar')
+      assert.deepEqual(experiment.cleanValue(value), value + ' bar')
     })
   })
 
@@ -97,10 +97,10 @@ describe('Experiment', function () {
     })
   })
 
-  describe('ignore_mismatched_observation', function () {
+  describe('ignoreMismatchedObservation', function () {
     describe('with no ignore functions', function () {
       it('should return false', function () {
-        assert.notOk(experiment.ignore_mismatched_observation())
+        assert.notOk(experiment.ignoreMismatchedObservation())
       })
     })
 
@@ -118,7 +118,7 @@ describe('Experiment', function () {
       })
 
       it('should run each ignore function with the values', function () {
-        experiment.ignore_mismatched_observation(control, candidate)
+        experiment.ignoreMismatchedObservation(control, candidate)
         sinon.assert.calledOnce(fail)
         sinon.assert.calledWithExactly(fail, 1, 2)
         sinon.assert.calledOnce(pass)
@@ -126,17 +126,17 @@ describe('Experiment', function () {
       })
 
       it('should return true if any ignore is truthy', function () {
-        assert.ok(experiment.ignore_mismatched_observation(control, candidate))
+        assert.ok(experiment.ignoreMismatchedObservation(control, candidate))
       })
 
       it('should return false if no ignore is truthy', function () {
         pass.returns(false)
-        assert.notOk(experiment.ignore_mismatched_observation(control, candidate))
+        assert.notOk(experiment.ignoreMismatchedObservation(control, candidate))
       })
     })
   })
 
-  describe('observations_are_equivalent', function () {
+  describe('observationsAreEquivalent', function () {
     var control = { value: 1 }
     var candidate = { value: 2 }
 
@@ -148,53 +148,53 @@ describe('Experiment', function () {
       })
 
       it('should call the comparator with the observations', function () {
-        experiment.observations_are_equivalent(control, candidate)
+        experiment.observationsAreEquivalent(control, candidate)
         sinon.assert.calledOnce(fn)
         sinon.assert.calledWithExactly(fn, control, candidate)
       })
 
       it('should return the boolean the comparator returns', function () {
         fn.returns(false)
-        assert.notOk(experiment.observations_are_equivalent(control, candidate))
+        assert.notOk(experiment.observationsAreEquivalent(control, candidate))
         fn.returns(true)
-        assert.ok(experiment.observations_are_equivalent(control, candidate))
+        assert.ok(experiment.observationsAreEquivalent(control, candidate))
       })
     })
 
     describe('without a comparator', function () {
       it('should simply compare === the values', function () {
-        assert.notOk(experiment.observations_are_equivalent(control, candidate))
-        assert.ok(experiment.observations_are_equivalent(control, control))
+        assert.notOk(experiment.observationsAreEquivalent(control, candidate))
+        assert.ok(experiment.observationsAreEquivalent(control, control))
       })
     })
   })
 
-  describe('run_if', function () {
+  describe('runIf', function () {
     it('should set _run_if_fn', function () {
       function fn () {}
-      experiment.run_if(fn)
+      experiment.runIf(fn)
       assert.deepEqual(experiment._run_if_fn, fn)
     })
   })
 
-  describe('run_if_fn_allows', function () {
+  describe('runIfFuncAllows', function () {
     describe('with no fn', function () {
       it('returns true', function () {
-        assert.ok(experiment.run_if_fn_allows())
+        assert.ok(experiment.runIfFuncAllows())
       })
     })
     describe('with fn', function () {
       it('should obey the given function', function () {
         var fn = sinon.stub().returns(true)
-        experiment.run_if(fn)
-        assert.ok(experiment.run_if_fn_allows())
+        experiment.runIf(fn)
+        assert.ok(experiment.runIfFuncAllows())
         fn.returns(false)
-        assert.notOk(experiment.run_if_fn_allows())
+        assert.notOk(experiment.runIfFuncAllows())
       })
     })
   })
 
-  describe('should_experiment_run', function () {
+  describe('shouldExperimentRun', function () {
     describe('with multiple behaviors', function () {
       beforeEach(function () {
         experiment.use(Promise.resolve(1))
@@ -203,17 +203,17 @@ describe('Experiment', function () {
 
       describe('with no fn', function () {
         it('should return true', function () {
-          assert.ok(experiment.should_experiment_run())
+          assert.ok(experiment.shouldExperimentRun())
         })
       })
 
       describe('with a fn', function () {
         it('should obey the fn', function () {
           var fn = sinon.stub().returns(true)
-          experiment.run_if(fn)
-          assert.ok(experiment.should_experiment_run())
+          experiment.runIf(fn)
+          assert.ok(experiment.shouldExperimentRun())
           fn.returns(false)
-          assert.notOk(experiment.should_experiment_run())
+          assert.notOk(experiment.shouldExperimentRun())
         })
       })
     })
@@ -221,17 +221,17 @@ describe('Experiment', function () {
     describe('with no behaviors', function () {
       describe('with no fn', function () {
         it('should return false', function () {
-          assert.notOk(experiment.should_experiment_run())
+          assert.notOk(experiment.shouldExperimentRun())
         })
       })
 
       describe('with a fn', function () {
         it('should still return false', function () {
           var fn = sinon.stub().returns(true)
-          experiment.run_if(fn)
-          assert.notOk(experiment.should_experiment_run())
+          experiment.runIf(fn)
+          assert.notOk(experiment.shouldExperimentRun())
           fn.returns(false)
-          assert.notOk(experiment.should_experiment_run())
+          assert.notOk(experiment.shouldExperimentRun())
         })
       })
     })
@@ -239,16 +239,16 @@ describe('Experiment', function () {
     describe('with manual not enabled', function () {
       it('should return false', function () {
         experiment.enabled = false
-        assert.notOk(experiment.should_experiment_run())
+        assert.notOk(experiment.shouldExperimentRun())
       })
     })
   })
 
-  describe('raise_on_mismatches', function () {
+  describe('raiseOnMismatches', function () {
     it('should return a boolean from _raise_on_mismatches', function () {
-      assert.notOk(experiment.raise_on_mismatches())
+      assert.notOk(experiment.raiseOnMismatches())
       experiment._raise_on_mismatches = true
-      assert.ok(experiment.raise_on_mismatches())
+      assert.ok(experiment.raiseOnMismatches())
     })
   })
 
@@ -303,7 +303,7 @@ describe('Experiment', function () {
         experiment.use(sinon.stub().returns(Promise.resolve(5))) // control
         experiment.try(sinon.stub().returns(Promise.resolve(6))) // candidate
         sinon.stub(Experiment.prototype, 'publish').returns(Promise.resolve())
-        sinon.stub(Experiment.prototype, 'should_experiment_run').returns(true)
+        sinon.stub(Experiment.prototype, 'shouldExperimentRun').returns(true)
         sinon.stub(Observation, 'create', function (key, experiment, fn) {
           var e
           return Promise.resolve()
@@ -322,14 +322,14 @@ describe('Experiment', function () {
         })
         mockResult.mismatched = sinon.stub().returns(false)
         sinon.stub(Result, 'create').returns(mockResult)
-        sinon.spy(knuth_shuffle, 'knuthShuffle')
+        sinon.spy(KnuthShuffle, 'knuthShuffle')
       })
       afterEach(function () {
         Experiment.prototype.publish.restore()
-        Experiment.prototype.should_experiment_run.restore()
+        Experiment.prototype.shouldExperimentRun.restore()
         Observation.create.restore()
         Result.create.restore()
-        knuth_shuffle.knuthShuffle.restore()
+        KnuthShuffle.knuthShuffle.restore()
       })
 
       it('should reject with an error if the specified control is missing', function () {
@@ -343,15 +343,15 @@ describe('Experiment', function () {
       it('should check if the experiment can be run', function () {
         return assert.isFulfilled(experiment.run())
           .then(function () {
-            sinon.assert.calledOnce(Experiment.prototype.should_experiment_run)
+            sinon.assert.calledOnce(Experiment.prototype.shouldExperimentRun)
           })
       })
 
       it('should not run if the experiment should not be run', function () {
-        Experiment.prototype.should_experiment_run.returns(false)
+        Experiment.prototype.shouldExperimentRun.returns(false)
         return assert.isFulfilled(experiment.run())
           .then(function () {
-            sinon.assert.notCalled(knuth_shuffle.knuthShuffle)
+            sinon.assert.notCalled(KnuthShuffle.knuthShuffle)
           })
       })
 
@@ -359,7 +359,7 @@ describe('Experiment', function () {
         var before
         beforeEach(function () {
           before = sinon.stub().returns(Promise.resolve(true))
-          experiment.before_run(before)
+          experiment.beforeRun(before)
         })
 
         it('should run the before function', function () {
@@ -373,9 +373,9 @@ describe('Experiment', function () {
       it('should shuffle the behaviors before running them', function () {
         return assert.isFulfilled(experiment.run())
           .then(function () {
-            sinon.assert.calledOnce(knuth_shuffle.knuthShuffle)
+            sinon.assert.calledOnce(KnuthShuffle.knuthShuffle)
             // the keys will be in a random order, so have to check this way
-            var keys = knuth_shuffle.knuthShuffle.firstCall.args[0]
+            var keys = KnuthShuffle.knuthShuffle.firstCall.args[0]
             assert.lengthOf(keys, 2)
             assert.include(keys, 'control')
             assert.include(keys, 'candidate')
@@ -402,8 +402,8 @@ describe('Experiment', function () {
       })
 
       it('should reject if for some reason the control got lost', function () {
-        knuth_shuffle.knuthShuffle.restore()
-        sinon.stub(knuth_shuffle, 'knuthShuffle').returns([])
+        KnuthShuffle.knuthShuffle.restore()
+        sinon.stub(KnuthShuffle, 'knuthShuffle').returns([])
         return assert.isRejected(
           experiment.run(),
           Error,

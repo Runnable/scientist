@@ -10,8 +10,8 @@ var sinon = require('sinon')
 var Result = require('../../src/result')
 
 var mockExperiment = {
-  observations_are_equivalent: sinon.stub().returns(false),
-  ignore_mismatched_observation: sinon.stub().returns(false)
+  observationsAreEquivalent: sinon.stub().returns(false),
+  ignoreMismatchedObservation: sinon.stub().returns(false)
 }
 var mockObservationOne = {
   name: 'control',

@@ -1,15 +1,15 @@
 /* @flow */
 
-import Debug from 'debug'
-import Promise from 'bluebird'
+import { List, Map } from 'immutable'
 import assign from '101/assign'
+import Debug from 'debug'
 import find from '101/find'
 import hasProperties from '101/has-properties'
-import isString from '101/is-string'
 import isFunction from '101/is-function'
 import isObject from '101/is-object'
-import knuth_shuffle from 'knuth-shuffle'
-import { List, Map } from 'immutable'
+import isString from '101/is-string'
+import KnuthShuffle from 'knuth-shuffle'
+import Promise from 'bluebird'
 
 import MismatchError from './errors/mismatch-error'
 import Observation from './observation'
@@ -49,8 +49,8 @@ class Experiment<V> {
    * enabled.
    * @param {Function} fn Function to run.
    */
-  before_run (fn: () => boolean) {
-    debug('before_run')
+  beforeRun (fn: () => boolean) {
+    debug('beforeRun')
     this._before_run_fn = fn
   }
 
@@ -70,8 +70,8 @@ class Experiment<V> {
    * @param {Object} value Value to be cleaned.
    * @return {Object} Cleaned (if applicable) value.
    */
-  clean_value (value: V): V {
-    debug('clean_value')
+  cleanValue (value: V): V {
+    debug('cleanValue')
     if (isFunction(this._cleaner_fn)) {
       return this._cleaner_fn(value)
     } else {
@@ -121,11 +121,11 @@ class Experiment<V> {
    * @param {Object} candidate Candidate value that mismatches.
    * @return {boolean} Returns true if the pair should be ignored.
    */
-  ignore_mismatched_observation (
+  ignoreMismatchedObservation (
     control: Observation,
     candidate: Observation
   ): boolean {
-    debug('ignore_mismatched_observation')
+    debug('ignoreMismatchedObservation')
     if (this._ignores.size === 0) {
       return false
     }
@@ -139,17 +139,17 @@ class Experiment<V> {
    * @param {Observation} candidate Candidate Observation.
    * @return {Boolean} True if the two observations are equivalent.
    */
-  observations_are_equivalent (
+  observationsAreEquivalent (
     control: Observation,
     candidate: Observation
   ): boolean {
-    debug('observations_are_equivalent')
+    debug('observationsAreEquivalent')
     if (isFunction(this._comparator)) {
       return this._comparator(control, candidate)
     } else {
-      const same_values = control.value === candidate.value
-      const same_exception = control.exception === candidate.exception
-      return same_values && same_exception
+      const sameValues = control.value === candidate.value
+      const sameException = control.exception === candidate.exception
+      return sameValues && sameException
     }
   }
 
@@ -163,13 +163,13 @@ class Experiment<V> {
   run (name: string = 'control'): Promise<V> {
     debug('run')
     return Promise.resolve().then(() => {
-      const control_fn = this._behaviors.get(name)
-      if (!isFunction(control_fn)) {
+      const controlFunc = this._behaviors.get(name)
+      if (!isFunction(controlFunc)) {
         throw new Error(`${name} behavior is missing.`)
       }
 
-      if (!this.should_experiment_run()) {
-        return control_fn()
+      if (!this.shouldExperimentRun()) {
+        return controlFunc()
       }
 
       return Promise.resolve().then(() => {
@@ -180,7 +180,7 @@ class Experiment<V> {
         .then(() => {
           let promises = []
 
-          const shuffle = knuth_shuffle.knuthShuffle
+          const shuffle = KnuthShuffle.knuthShuffle
           shuffle(this._behaviors.keySeq().toArray()).forEach((key) => {
             const fn = this._behaviors.get(key)
             promises.push(Observation.create(key, this, fn))
@@ -197,7 +197,7 @@ class Experiment<V> {
 
           return this.publish(result)
             .then(() => {
-              if (this.raise_on_mismatches() && result.mismatched()) {
+              if (this.raiseOnMismatches() && result.mismatched()) {
                 throw new MismatchError(name, result)
               }
               if (control.raised()) {
@@ -215,8 +215,8 @@ class Experiment<V> {
    * @param {Function} fn Function determining fate of experiment. Returns true or
    *   false.
    */
-  run_if (fn: () => boolean) {
-    debug('run_if')
+  runIf (fn: () => boolean) {
+    debug('runIf')
     this._run_if_fn = fn
   }
 
@@ -225,8 +225,8 @@ class Experiment<V> {
    * @private
    * @return {Boolean} True if the _run_if_fn returns true.
    */
-  run_if_fn_allows (): boolean {
-    debug('run_if_fn_allows')
+  runIfFuncAllows (): boolean {
+    debug('runIfFuncAllows')
     return isFunction(this._run_if_fn)
       ? this._run_if_fn()
       : true
@@ -236,19 +236,19 @@ class Experiment<V> {
    * Determine if the experiment should be run.
    * @return {Boolean} True if the experiment is allowed to run.
    */
-  should_experiment_run (): boolean {
-    debug('should_experiment_run')
+  shouldExperimentRun (): boolean {
+    debug('shouldExperimentRun')
     return this._behaviors.size > 1 &&
       this.enabled &&
-      this.run_if_fn_allows()
+      this.runIfFuncAllows()
   }
 
   /**
    * Determine if mismatch errors should be thrown.
    * @return {[type]} [description]
    */
-  raise_on_mismatches (): boolean {
-    debug('raise_on_mismatches')
+  raiseOnMismatches (): boolean {
+    debug('raiseOnMismatches')
     return !!this._raise_on_mismatches
   }
 
