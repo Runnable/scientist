@@ -59,7 +59,7 @@
     "101": "^1.2.0",
     "bluebird": "^3.3.3",
     "debug": "^2.2.0",
-    "es6-error": "^2.0.2",
+    "es6-error": "^3.0.0",
     "immutable": "^3.7.6",
     "in-publish": "^2.0.0",
     "knuth-shuffle": "^1.0.1"
