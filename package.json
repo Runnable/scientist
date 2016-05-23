@@ -50,7 +50,7 @@
     "chai-as-promised": "^5.1.0",
     "coveralls": "^2.11.8",
     "flow-bin": "^0.25.0",
-    "mocha": "^2.5.0",
+    "mocha": "^2.5.1",
     "nyc": "^6.4.3",
     "sinon": "^1.17.2",
     "standard": "^7.0.1"
