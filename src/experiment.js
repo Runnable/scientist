@@ -19,11 +19,11 @@ const debug = Debug('scientist:experiment')
 
 class Experiment<V> {
   _before_run_fn: Function;
-  _behaviors: Map;
+  _behaviors: Map<string, Function>;
   _cleaner_fn: Function;
   _comparator: Function;
   _context: Object;
-  _ignores: List;
+  _ignores: List<(control: V, o: V) => boolean>;
   _raise_on_mismatches: boolean;
   _run_if_fn: Function;
   enabled: boolean;
@@ -59,7 +59,7 @@ class Experiment<V> {
    * @param {Function} fn Function to clean the value. Must take one argument,
    *   the value to be cleaned.
    */
-  clean (fn: (value: V) => V) {
+  clean (fn: (value: V) => V): void {
     debug('clean')
     this._cleaner_fn = fn
   }
@@ -84,7 +84,7 @@ class Experiment<V> {
    * @param {Function} fn Function to compare. Must accept two arguments, the
    *   control and candidate values, and return true or false.
    */
-  compare (fn: (a: V, b: V) => boolean) {
+  compare (fn: (a: V, b: V) => boolean): void {
     debug('compare')
     this._comparator = fn
   }
@@ -108,7 +108,7 @@ class Experiment<V> {
    * do not match. If the function returns true, the mismatch is discarded.
    * @param {Function} fn Function that returns a boolean about a match.
    */
-  ignore (fn: (o: Observation) => boolean) {
+  ignore (fn: (control: V, o: V) => boolean): void {
     debug('ignore')
     this._ignores = this._ignores.push(fn)
   }
@@ -122,8 +122,8 @@ class Experiment<V> {
    * @return {boolean} Returns true if the pair should be ignored.
    */
   ignoreMismatchedObservation (
-    control: Observation,
-    candidate: Observation
+    control: Observation<V>,
+    candidate: Observation<V>
   ): boolean {
     debug('ignoreMismatchedObservation')
     if (this._ignores.size === 0) {
@@ -140,8 +140,8 @@ class Experiment<V> {
    * @return {Boolean} True if the two observations are equivalent.
    */
   observationsAreEquivalent (
-    control: Observation,
-    candidate: Observation
+    control: Observation<V>,
+    candidate: Observation<V>
   ): boolean {
     debug('observationsAreEquivalent')
     if (isFunction(this._comparator)) {
@@ -215,7 +215,7 @@ class Experiment<V> {
    * @param {Function} fn Function determining fate of experiment. Returns true or
    *   false.
    */
-  runIf (fn: () => boolean) {
+  runIf (fn: () => boolean): void {
     debug('runIf')
     this._run_if_fn = fn
   }
@@ -253,19 +253,22 @@ class Experiment<V> {
   }
 
   // FIXME(@bkendall): I dislike this...
-  try (name: string | Function, fn: ?string | Function) {
+  try (name: string | Function, fn?: Function): void {
     debug('try')
-    if (!isString(name)) {
+    if (typeof name === 'function') {
       fn = name
       name = 'candidate'
     }
     if (this._behaviors.has(name)) {
       throw new Error(`Name (${name}) is not unique for behavior`)
     }
+    if (typeof fn !== 'function') {
+      throw new Error('.try: Function is not a function.')
+    }
     this._behaviors = this._behaviors.set(name, fn)
   }
 
-  use (fn: Function) {
+  use (fn: Function): void {
     debug('use')
     this.try('control', fn)
   }

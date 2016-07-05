@@ -10,17 +10,17 @@ import Observation from './observation'
 const debug = Debug('scientist:result')
 
 class Result {
-  _ignored: List<Observation>;
-  _mismatched: List<Observation>;
-  candidates: List<Observation>;
-  control: Observation;
-  experiment: Experiment;
-  observations: Array<Observation>;
+  _ignored: List<Observation<*>>;
+  _mismatched: List<Observation<*>>;
+  candidates: List<Observation<*>>;
+  control: Observation<*>;
+  experiment: Experiment<*>;
+  observations: Array<Observation<*>>;
 
   constructor (
-    experiment: Experiment,
-    observations: Array<Observation>,
-    control: Observation
+    experiment: Experiment<*>,
+    observations: Array<Observation<*>>,
+    control: Observation<*>
   ) {
     debug('constructor')
     this.experiment = experiment
@@ -45,10 +45,10 @@ class Result {
    * @return {Result} New Result.
    */
   static create (
-    experiment: Experiment,
-    observations: Array<Observation>,
-    control: Observation
-  ) {
+    experiment: Experiment<*>,
+    observations: Array<Observation<*>>,
+    control: Observation<*>
+  ): Result {
     debug('create')
     return new Result(experiment, observations, control)
   }
@@ -103,7 +103,7 @@ class Result {
    * ._mismatched and ._ignored with appropriate candidates.
    * @private
    */
-  evaluateCandidates () {
+  evaluateCandidates (): void {
     let mismatched = this.candidates.filter((candidate) => {
       return !this.experiment.observationsAreEquivalent(this.control, candidate)
     })

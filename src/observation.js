@@ -8,20 +8,24 @@ import Experiment from './experiment'
 class Observation<V> {
   duration: number;
   exception: Error;
-  experiment: Experiment;
+  experiment: Experiment<V>;
   fn: Function;
   name: string;
   now: number;
   value: V;
 
-  constructor (name: string, experiment: Experiment, fn: Function) {
+  constructor (name: string, experiment: Experiment<V>, fn: Function) {
     this.name = name
     this.experiment = experiment
     this.now = Date.now()
     this.fn = fn
   }
 
-  static create (name, experiment, fn) {
+  static create (
+    name: string,
+    experiment: Experiment<V>,
+    fn: Function
+  ): Promise<Observation<V>> {
     const observation = new Observation(name, experiment, fn)
     return Promise.resolve()
       .then(() => (observation.fn()))
@@ -38,7 +42,7 @@ class Observation<V> {
    * block to clean the observed value.
    * @return {Object} Cleaned value.
    */
-  cleanedValue () {
+  cleanedValue (): ?V {
     if (this.value) {
       return this.experiment.cleanValue(this.value)
     }
@@ -63,7 +67,7 @@ class Observation<V> {
    * @return {Boolean} True if they are equivalent.
    */
   equivalentTo (
-    other: Observation,
+    other: Observation<V>,
     comparator: (a: V, b: V) => boolean
   ): boolean {
     if (!(other instanceof Observation)) {
