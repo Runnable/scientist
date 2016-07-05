@@ -22,7 +22,7 @@ class Experiment<V> {
   _cleaner_fn: Function;
   _comparator: Function;
   _context: Object;
-  _ignores: List<(control: V, o: V) => boolean>;
+  _ignores: List<(control: V, observation: V) => boolean>;
   _raise_on_mismatches: boolean;
   _run_if_fn: Function;
   enabled: boolean;
