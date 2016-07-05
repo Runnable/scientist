@@ -272,6 +272,13 @@ describe('Experiment', function () {
       assert.equal(experiment._behaviors.size, 1)
       assert.deepEqual(experiment._behaviors.get('foo'), p)
     })
+
+    it('should throw an error if we do not give it a function', function () {
+      assert.throws(
+        function () { experiment.try(true) },
+        /Function.+function/
+      )
+    })
   })
 
   describe('use', function () {
