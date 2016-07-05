@@ -7,7 +7,6 @@ import find from '101/find'
 import hasProperties from '101/has-properties'
 import isFunction from '101/is-function'
 import isObject from '101/is-object'
-import isString from '101/is-string'
 import KnuthShuffle from 'knuth-shuffle'
 import Promise from 'bluebird'
 
