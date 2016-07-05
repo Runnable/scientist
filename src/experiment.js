@@ -107,7 +107,7 @@ class Experiment<V> {
    * do not match. If the function returns true, the mismatch is discarded.
    * @param {Function} fn Function that returns a boolean about a match.
    */
-  ignore (fn: (control: V, o: V) => boolean): void {
+  ignore (fn: (control: V, observation: V) => boolean): void {
     debug('ignore')
     this._ignores = this._ignores.push(fn)
   }
