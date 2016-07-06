@@ -2,7 +2,6 @@
 
 import { List } from 'immutable'
 import Debug from 'debug'
-import hasProperties from '101/has-properties'
 
 import Experiment from './experiment'
 import Observation from './observation'
@@ -10,17 +9,17 @@ import Observation from './observation'
 const debug = Debug('scientist:result')
 
 class Result {
-  _ignored: List<Observation>;
-  _mismatched: List<Observation>;
-  candidates: List<Observation>;
-  control: Observation;
-  experiment: Experiment;
-  observations: Array<Observation>;
+  _ignored: List<Observation<*>>;
+  _mismatched: List<Observation<*>>;
+  candidates: List<Observation<*>>;
+  control: Observation<*>;
+  experiment: Experiment<*>;
+  observations: Array<Observation<*>>;
 
   constructor (
-    experiment: Experiment,
-    observations: Array<Observation>,
-    control: Observation
+    experiment: Experiment<*>,
+    observations: Array<Observation<*>>,
+    control: Observation<*>
   ) {
     debug('constructor')
     this.experiment = experiment
@@ -28,7 +27,7 @@ class Result {
     this.control = control
 
     this.candidates = List(observations)
-    this.candidates = this.candidates.filterNot(hasProperties({ name: 'control' }))
+    this.candidates = this.candidates.filterNot((c) => (c.name === 'control'))
 
     this._mismatched = List()
     this._ignored = List()
@@ -45,10 +44,10 @@ class Result {
    * @return {Result} New Result.
    */
   static create (
-    experiment: Experiment,
-    observations: Array<Observation>,
-    control: Observation
-  ) {
+    experiment: Experiment<*>,
+    observations: Array<Observation<*>>,
+    control: Observation<*>
+  ): Result {
     debug('create')
     return new Result(experiment, observations, control)
   }
@@ -103,7 +102,7 @@ class Result {
    * ._mismatched and ._ignored with appropriate candidates.
    * @private
    */
-  evaluateCandidates () {
+  evaluateCandidates (): void {
     let mismatched = this.candidates.filter((candidate) => {
       return !this.experiment.observationsAreEquivalent(this.control, candidate)
     })
