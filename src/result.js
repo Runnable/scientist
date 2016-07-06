@@ -2,7 +2,6 @@
 
 import { List } from 'immutable'
 import Debug from 'debug'
-import hasProperties from '101/has-properties'
 
 import Experiment from './experiment'
 import Observation from './observation'
@@ -28,7 +27,7 @@ class Result {
     this.control = control
 
     this.candidates = List(observations)
-    this.candidates = this.candidates.filterNot(hasProperties({ name: 'control' }))
+    this.candidates = this.candidates.filterNot((c) => (c.name === 'control'))
 
     this._mismatched = List()
     this._ignored = List()
