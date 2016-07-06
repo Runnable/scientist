@@ -1,6 +1,5 @@
 /* @flow */
 
-import isFunction from '101/is-function'
 import Promise from 'bluebird'
 
 import Experiment from './experiment'
@@ -79,7 +78,7 @@ class Observation<V> {
     const neitherRaised = !other.raised() && !this.raised()
 
     if (neitherRaised) {
-      if (isFunction(comparator)) {
+      if (typeof comparator === 'function') {
         valuesAreEqual = comparator(this.value, other.value)
       } else {
         valuesAreEqual = this.value === other.value
