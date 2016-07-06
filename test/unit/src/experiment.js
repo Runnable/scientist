@@ -197,8 +197,8 @@ describe('Experiment', function () {
   describe('shouldExperimentRun', function () {
     describe('with multiple behaviors', function () {
       beforeEach(function () {
-        experiment.use(function () { Promise.resolve(1) })
-        experiment.try(function () { Promise.resolve(2) })
+        experiment.use(function () { return Promise.resolve(1) })
+        experiment.try(function () { return Promise.resolve(2) })
       })
 
       describe('with no fn', function () {
@@ -254,20 +254,20 @@ describe('Experiment', function () {
 
   describe('try', function () {
     it('should default the name to candidate', function () {
-      var p = function () { Promise.resolve() }
+      var p = function () { return Promise.resolve() }
       experiment.try(p)
       assert.equal(experiment._behaviors.size, 1)
       assert.deepEqual(experiment._behaviors.get('candidate'), p)
     })
 
     it('should throw if name added twice', function () {
-      var p = function () { Promise.resolve() }
+      var p = function () { return Promise.resolve() }
       experiment.try(p)
       assert.throws(function () { experiment.try(p) }, /not unique/)
     })
 
     it('should add with the correct name to behaviors', function () {
-      var p = function () { Promise.resolve() }
+      var p = function () { return Promise.resolve() }
       experiment.try('foo', p)
       assert.equal(experiment._behaviors.size, 1)
       assert.deepEqual(experiment._behaviors.get('foo'), p)
@@ -290,7 +290,7 @@ describe('Experiment', function () {
     })
 
     it('should use try to add the control', function () {
-      var p = function () { Promise.resolve() }
+      var p = function () { return Promise.resolve() }
       experiment.use(p)
       sinon.assert.calledOnce(Experiment.prototype.try)
       sinon.assert.calledWithExactly(Experiment.prototype.try, 'control', p)
