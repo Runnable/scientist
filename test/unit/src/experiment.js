@@ -43,7 +43,7 @@ describe('Experiment', function () {
     it('should set the internal beforeRun function', function () {
       var fn = sinon.stub().returns(Promise.resolve(true))
       experiment.beforeRun(fn)
-      assert.deepEqual(experiment._before_run_fn, fn)
+      assert.deepEqual(experiment._beforeRunFn, fn)
     })
   })
 
@@ -51,13 +51,13 @@ describe('Experiment', function () {
     it('should set the internal cleaner function', function () {
       function fn () {}
       experiment.clean(fn)
-      assert.deepEqual(experiment._cleaner_fn, fn)
+      assert.deepEqual(experiment._cleanerFn, fn)
     })
   })
 
   describe('cleanValue', function () {
     it('should return the value if no clean function', function () {
-      assert.isUndefined(experiment._cleaner_fn)
+      assert.isUndefined(experiment._cleanerFn)
       var value = 'foo'
       assert.deepEqual(experiment.cleanValue(value), value)
     })
@@ -170,10 +170,10 @@ describe('Experiment', function () {
   })
 
   describe('runIf', function () {
-    it('should set _run_if_fn', function () {
+    it('should set _runIfFn', function () {
       function fn () {}
       experiment.runIf(fn)
-      assert.deepEqual(experiment._run_if_fn, fn)
+      assert.deepEqual(experiment._runIfFn, fn)
     })
   })
 
@@ -245,9 +245,9 @@ describe('Experiment', function () {
   })
 
   describe('raiseOnMismatches', function () {
-    it('should return a boolean from _raise_on_mismatches', function () {
+    it('should return a boolean from _raiseOnMismatches', function () {
       assert.notOk(experiment.raiseOnMismatches())
-      experiment._raise_on_mismatches = true
+      experiment._raiseOnMismatches = true
       assert.ok(experiment.raiseOnMismatches())
     })
   })
@@ -450,7 +450,7 @@ describe('Experiment', function () {
 
       describe('if raising on mismatches', function () {
         beforeEach(function () {
-          experiment._raise_on_mismatches = true
+          experiment._raiseOnMismatches = true
         })
 
         it('should throw a MismatchError if a result mismatched', function () {
