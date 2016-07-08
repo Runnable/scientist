@@ -17,14 +17,14 @@ import Result from './result'
 const debug = Debug('scientist:experiment')
 
 class Experiment<V> {
-  _beforeRunFn: Function;
-  _behaviors: Map<string, Function>;
-  _cleanerFn: Function;
-  _comparator: Function;
+  _beforeRunFn: (...rest: Array<any>) => boolean;
+  _behaviors: Map<string, (...rest: Array<any>) => V>;
+  _cleanerFn: (value: V) => V;
+  _comparator: (a: Observation<V>, b: Observation<V>) => boolean;
   _context: Object;
   _ignores: List<(control: V, observation: V) => boolean>;
   _raiseOnMismatches: boolean;
-  _runIfFn: Function;
+  _runIfFn: (...rest: Array<any>) => boolean;
   enabled: boolean;
   name: string;
 
@@ -83,7 +83,7 @@ class Experiment<V> {
    * @param {Function} fn Function to compare. Must accept two arguments, the
    *   control and candidate values, and return true or false.
    */
-  compare (fn: (a: V, b: V) => boolean): void {
+  compare (fn: (a: Observation<V>, b: Observation<V>) => boolean): void {
     debug('compare')
     this._comparator = fn
   }

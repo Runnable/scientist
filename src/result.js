@@ -8,18 +8,18 @@ import Observation from './observation'
 
 const debug = Debug('scientist:result')
 
-class Result {
-  _ignored: List<Observation<*>>;
-  _mismatched: List<Observation<*>>;
-  candidates: List<Observation<*>>;
-  control: Observation<*>;
-  experiment: Experiment<*>;
-  observations: Array<Observation<*>>;
+class Result<V> {
+  _ignored: List<Observation<V>>;
+  _mismatched: List<Observation<V>>;
+  candidates: List<Observation<V>>;
+  control: Observation<V>;
+  experiment: Experiment<V>;
+  observations: Array<Observation<V>>;
 
   constructor (
-    experiment: Experiment<*>,
-    observations: Array<Observation<*>>,
-    control: Observation<*>
+    experiment: Experiment<V>,
+    observations: Array<Observation<V>>,
+    control: Observation<V>
   ) {
     debug('constructor')
     this.experiment = experiment
@@ -44,10 +44,10 @@ class Result {
    * @return {Result} New Result.
    */
   static create (
-    experiment: Experiment<*>,
-    observations: Array<Observation<*>>,
-    control: Observation<*>
-  ): Result {
+    experiment: Experiment<V>,
+    observations: Array<Observation<V>>,
+    control: Observation<V>
+  ): Result<V> {
     debug('create')
     return new Result(experiment, observations, control)
   }

@@ -8,12 +8,16 @@ class Observation<V> {
   duration: number;
   exception: Error;
   experiment: Experiment<V>;
-  fn: Function;
+  fn: (...rest: Array<any>) => Promise<V> | V;
   name: string;
   now: number;
   value: V;
 
-  constructor (name: string, experiment: Experiment<V>, fn: Function) {
+  constructor (
+    name: string,
+    experiment: Experiment<V>,
+    fn: (...rest: Array<any>
+  ) => Promise<V> | V) {
     this.name = name
     this.experiment = experiment
     this.now = Date.now()
@@ -23,7 +27,7 @@ class Observation<V> {
   static create (
     name: string,
     experiment: Experiment<V>,
-    fn: Function
+    fn: (...rest: Array<any>) => Promise<V> | V
   ): Promise<Observation<V>> {
     const observation = new Observation(name, experiment, fn)
     return Promise.resolve()
