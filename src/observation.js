@@ -41,8 +41,8 @@ class Observation<V> {
   }
 
   /**
-   * Return a cleaned value for publishing. Uses the experiment's defined cleaner
-   * block to clean the observed value.
+   * Return a cleaned value for publishing. Uses the experiment's defined
+   * cleaner block to clean the observed value.
    * @return {Object} Cleaned value.
    */
   cleanedValue (): ?V {

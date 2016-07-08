@@ -108,7 +108,11 @@ class Result<V> {
     })
 
     mismatched.forEach((candidate) => {
-      if (this.experiment.ignoreMismatchedObservation(this.control, candidate)) {
+      const ignore = this.experiment.ignoreMismatchedObservation(
+        this.control,
+        candidate
+      )
+      if (ignore) {
         this._ignored = this._ignored.push(candidate)
       } else {
         this._mismatched = this._mismatched.push(candidate)

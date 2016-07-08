@@ -103,8 +103,8 @@ class Experiment<V> {
 
   /**
    * Configure experiment to ignore an observation with the given function. The
-   * function takes two arguments, the control and the candidate observation that
-   * do not match. If the function returns true, the mismatch is discarded.
+   * function takes two arguments, the control and the candidate observation
+   * that do not match. If the function returns true, the mismatch is discarded.
    * @param {Function} fn Function that returns a boolean about a match.
    */
   ignore (fn: (control: V, observation: V) => boolean): void {
@@ -153,8 +153,8 @@ class Experiment<V> {
   }
 
   /**
-   * Run all behaviors for the experiment, observing each and publishing results.
-   * Return the result of the named behavior, default "control".
+   * Run all behaviors for the experiment, observing each and publishing
+   * results. Return the result of the named behavior, default "control".
    * @private
    * @param {String} name Name of the behavior to run. Default: "control"
    * @return {Object} Result of the control behavior.
@@ -211,8 +211,8 @@ class Experiment<V> {
 
   /**
    * Define a function that determines if the experiment can be run.
-   * @param {Function} fn Function determining fate of experiment. Returns true or
-   *   false.
+   * @param {Function} fn Function determining fate of experiment. Returns true
+   *   or false.
    */
   runIf (fn: () => boolean): void {
     debug('runIf')
