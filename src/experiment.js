@@ -17,14 +17,14 @@ import Result from './result'
 const debug = Debug('scientist:experiment')
 
 class Experiment<V> {
-  _before_run_fn: Function;
+  _beforeRunFn: Function;
   _behaviors: Map<string, Function>;
-  _cleaner_fn: Function;
+  _cleanerFn: Function;
   _comparator: Function;
   _context: Object;
   _ignores: List<(control: V, observation: V) => boolean>;
-  _raise_on_mismatches: boolean;
-  _run_if_fn: Function;
+  _raiseOnMismatches: boolean;
+  _runIfFn: Function;
   enabled: boolean;
   name: string;
 
@@ -35,7 +35,7 @@ class Experiment<V> {
     this._behaviors = Map()
     this._context = {}
     this._ignores = List()
-    this._raise_on_mismatches = false
+    this._raiseOnMismatches = false
   }
 
   publish (result: Object): Promise<boolean> {
@@ -50,7 +50,7 @@ class Experiment<V> {
    */
   beforeRun (fn: () => boolean) {
     debug('beforeRun')
-    this._before_run_fn = fn
+    this._beforeRunFn = fn
   }
 
   /**
@@ -60,7 +60,7 @@ class Experiment<V> {
    */
   clean (fn: (value: V) => V): void {
     debug('clean')
-    this._cleaner_fn = fn
+    this._cleanerFn = fn
   }
 
   /**
@@ -71,8 +71,8 @@ class Experiment<V> {
    */
   cleanValue (value: V): V {
     debug('cleanValue')
-    if (isFunction(this._cleaner_fn)) {
-      return this._cleaner_fn(value)
+    if (isFunction(this._cleanerFn)) {
+      return this._cleanerFn(value)
     } else {
       return value
     }
@@ -172,8 +172,8 @@ class Experiment<V> {
       }
 
       return Promise.resolve().then(() => {
-        if (isFunction(this._before_run_fn)) {
-          return this._before_run_fn()
+        if (isFunction(this._beforeRunFn)) {
+          return this._beforeRunFn()
         }
       })
         .then(() => {
@@ -216,18 +216,18 @@ class Experiment<V> {
    */
   runIf (fn: () => boolean): void {
     debug('runIf')
-    this._run_if_fn = fn
+    this._runIfFn = fn
   }
 
   /**
-   * Does the _run_if_fn allow the experiment to run?
+   * Does the _runIfFn allow the experiment to run?
    * @private
-   * @return {Boolean} True if the _run_if_fn returns true.
+   * @return {Boolean} True if the _runIfFn returns true.
    */
   runIfFuncAllows (): boolean {
     debug('runIfFuncAllows')
-    return isFunction(this._run_if_fn)
-      ? this._run_if_fn()
+    return isFunction(this._runIfFn)
+      ? this._runIfFn()
       : true
   }
 
@@ -248,7 +248,7 @@ class Experiment<V> {
    */
   raiseOnMismatches (): boolean {
     debug('raiseOnMismatches')
-    return !!this._raise_on_mismatches
+    return !!this._raiseOnMismatches
   }
 
   // FIXME(@bkendall): I dislike this...
