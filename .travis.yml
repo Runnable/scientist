@@ -1,11 +1,8 @@
 language: node_js
 node_js:
-- '0.10'
-- '4'
 - '6'
+- '10'
 sudo: false
-before_install:
-- if [[ "$(npm --version)" =~ ^1\..+ ]]; then npm install -g npm@2; fi
 before_script:
 - npm run lint:type:start-server
 script:
@@ -14,13 +11,5 @@ script:
 - npm run integration
 after_script:
 - npm run coveralls
-deploy:
-  provider: npm
-  email: bryan@bryankendall.com
-  api_key:
-    secure: FuGGwoqvUpdPCN5T6jHrmjyc7XJOfIMmeMufvXlgbY6iQoYZPtjhaJddDETqpsxoJ9QAiOAvIMyhsSbdPFE2wxAVbIVMQIzBXFYMsD7ApcB8fTFEhxNVT8k1UAvEUCKNRckM0E9JZA5EadMAsU6iscNHo4QaOlwR25BQgiLNRtjjjVU8P8v3Loz7BPGkW+JieVr2AEu6TV3Wbx0U2RNtwSqv7+tgnwfelWkWPQnnf+9+8Pv2FhIc+PUQxXu4yvlw2TCOR3zGUj1YBVDYgdzpxPIwybGyaebJXVysOdvE7noa/Zwt/w43dOpPDchcyUE0ZiL6CrqQuRHNXKCFogI2hH0XdcKlvOxCKSmuicwo3nIDNwKgdju6RdBiJCvyXvazdr3U9BuDzPAg62ducph87w+NS4s7QnS2ZMoj4vrUXGbL+SOqS7sxktnEQjshhpdQptyK3JiLR/9wer6KMGJoAZrmldBg9MUByjlezYjEQNGKWodsGLE6vRUKxcbfuYXbScPYpklcAiruTgpWxIph4wfE3EIaCfmsx2qTS1A6GV1UhjtrrAHzyXmIcEbh8IS66QxDVgHUII4EmGlyPArCU+gNGgw/65kRFJb+YEhG5ezUlunk/GHkhzUFl+KGeGOipClQnlvzdNBymWBbbMYgX8b6+H+UNLxBcYtOXOKu71w=
-  on:
-    tags: true
-    node: '4'
 notifications:
   email: false
