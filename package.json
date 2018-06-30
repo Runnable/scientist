@@ -19,7 +19,7 @@
   },
   "options": {
     "mocha": "--recursive --reporter spec --bail --require babel-register",
-    "nyc-coverage": "--check-coverage --lines 100 --functions 100 --branches 100 --statements 100"
+    "nyc-coverage": "--check-coverage --lines 100 --functions 100 --branches 98 --statements 100"
   },
   "author": "Bryan Kendall <bryan@bryankendall.com>",
   "repository": {
