@@ -18,13 +18,13 @@
     "unit": "NODE_ENV=test mocha $npm_package_options_mocha test/unit"
   },
   "options": {
-    "mocha": "--recursive --reporter spec --bail --compilers js:babel-register",
-    "nyc-coverage": "--check-coverage --lines 100 --functions 100 --branches 100 --statements 100"
+    "mocha": "--recursive --reporter spec --bail --require babel-register",
+    "nyc-coverage": "--check-coverage --lines 100 --functions 100 --branches 98 --statements 100"
   },
-  "author": "Bryan Kendall <bryan@runnable.com>",
+  "author": "Bryan Kendall <bryan@bryankendall.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Runnable/scientist"
+    "url": "https://github.com/bkendall/scientist"
   },
   "license": "MIT",
   "standard": {
@@ -40,26 +40,26 @@
   },
   "devDependencies": {
     "babel-cli": "^6.10.1",
-    "babel-eslint": "^6.1.2",
+    "babel-eslint": "^8.2.5",
     "babel-plugin-add-module-exports": "^0.2.0",
     "babel-plugin-transform-class-properties": "^6.6.0",
     "babel-plugin-transform-flow-strip-types": "^6.5.0",
     "babel-preset-es2015": "^6.5.0",
     "babel-register": "^6.5.2",
-    "chai": "^3.4.1",
-    "chai-as-promised": "^5.1.0",
-    "coveralls": "^2.11.8",
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "coveralls": "^3.0.2",
     "flow-bin": "^0.28.0",
-    "mocha": "^2.5.1",
-    "nyc": "^7.0.0",
-    "sinon": "^1.17.2",
-    "standard": "^7.0.1"
+    "mocha": "^5.2.0",
+    "nyc": "^12.0.2",
+    "sinon": "^6.0.1",
+    "standard": "^11.0.1"
   },
   "dependencies": {
     "101": "^1.6.0",
     "bluebird": "^3.3.3",
-    "debug": "^2.2.0",
-    "es6-error": "^3.0.0",
+    "debug": "^3.1.0",
+    "es6-error": "^4.1.1",
     "immutable": "^3.7.6",
     "in-publish": "^2.0.0",
     "knuth-shuffle": "^1.0.1"

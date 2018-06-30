@@ -311,7 +311,7 @@ describe('Experiment', function () {
         experiment.try(sinon.stub().returns(Promise.resolve(6))) // candidate
         sinon.stub(Experiment.prototype, 'publish').returns(Promise.resolve())
         sinon.stub(Experiment.prototype, 'shouldExperimentRun').returns(true)
-        sinon.stub(Observation, 'create', function (key, experiment, fn) {
+        sinon.stub(Observation, 'create').callsFake(function (key, experiment, fn) {
           var e
           return Promise.resolve()
             .then(function () { return fn() })
